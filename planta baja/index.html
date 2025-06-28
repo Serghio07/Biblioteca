@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Gestión de Biblioteca</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Simulador de Gestión de Biblioteca planta baja</h1>
+            <p>Sistema de monitoreo y control de usuarios, PCs y servicios</p>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" onclick="iniciarSimulacion()">▶️ Iniciar Simulación</button>
+            <button class="btn btn-secondary" onclick="pausarSimulacion()">⏸️ Pausar</button>
+            <button class="btn btn-danger" onclick="detenerSimulacion()">⏹️ Detener</button>
+            <button class="btn btn-primary" onclick="reiniciarSimulacion()">🔄 Reiniciar</button>
+        </div>
+
+        <div class="simulation-speed">
+            <label>Velocidad de Simulación:</label>
+            <input type="range" class="speed-slider" min="100" max="2000" value="1000" id="speedSlider">
+            <span id="speedLabel">1000ms</span>
+        </div>
+
+        <div class="status-bar" id="statusBar">
+            Sistema Listo - Presiona Iniciar para comenzar la simulación
+        </div>
+
+        <div class="dashboard">
+            <div class="card">
+                <h3>📅 Estado Temporal</h3>
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Día</div>
+                        <div class="stat-value" id="dia">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Hora</div>
+                        <div class="stat-value" id="hora">08:00</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Tipo Día</div>
+                        <div class="stat-value" id="tipoDia">Normal</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Hora Pico</div>
+                        <div class="stat-value" id="horaPico">No</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>👥 Usuarios Actuales</h3>
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Usuarios Activos</div>
+                        <div class="stat-value" id="usuariosActivos">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Capacidad Máx</div>
+                        <div class="stat-value">80</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Espacios Libres</div>
+                        <div class="stat-value" id="espaciosLibres">80</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">% Ocupación</div>
+                        <div class="stat-value" id="porcentajeOcupacion">0%</div>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="occupancyProgress" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>💻 Gestión de PCs</h3>
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">PCs en Uso</div>
+                        <div class="stat-value" id="pcsEnUso">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">PCs Libres</div>
+                        <div class="stat-value" id="pcsLibres">13</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Total PCs</div>
+                        <div class="stat-value">13</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">% Uso PCs</div>
+                        <div class="stat-value" id="porcentajePCs">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📊 Estadísticas Diarias</h3>
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Total Entradas</div>
+                        <div class="stat-value" id="totalEntradas">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Total Salidas</div>
+                        <div class="stat-value" id="totalSalidas">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Usuarios Rechazados</div>
+                        <div class="stat-value" id="usuariosRechazados">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Préstamos</div>
+                        <div class="stat-value" id="prestamos">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📈 Nuevas Estadísticas</h3>
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Entradas Hora Pico</div>
+                        <div class="stat-value" id="entradasHoraPico">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Total Uso PC</div>
+                        <div class="stat-value" id="totalUsoPC">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Permanencia Larga</div>
+                        <div class="stat-value" id="permanenciaLarga">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Permanencia Corta</div>
+                        <div class="stat-value" id="permanenciaCorta">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>⚙️ Variables del Sistema</h3>
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">API (Llegadas)</div>
+                        <div class="stat-value" id="api">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Tiempo Perm. Usuario</div>
+                        <div class="stat-value" id="tpu">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Solicitudes Préstamo</div>
+                        <div class="stat-value" id="solicitudesPrestamo">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Estado Sistema</div>
+                        <div class="stat-value" id="estadoSistema">Inactivo</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="log-container">
+            <h3 style="color: #00ff00; margin-bottom: 15px;">📋 Log de Actividad del Sistema</h3>
+            <div id="logContainer"></div>
+        </div>
+
+        <div class="final-report" id="finalReport">
+            <h2>📊 Reporte Final de Simulación</h2>
+            <div class="report-grid" id="reportGrid"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
